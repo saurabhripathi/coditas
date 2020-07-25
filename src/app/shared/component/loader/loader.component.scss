@@ -1,0 +1,16 @@
+.backdrop {
+  position: fixed;
+  box-sizing: border-box;
+  z-index: 9999;
+  height: 100%;
+  width: 100%;
+  background-color: gray;
+  opacity: 0.5;
+  text-align: center;
+}
+
+.backdrop div{
+    height: 100%;
+padding-top: 200px
+
+}
