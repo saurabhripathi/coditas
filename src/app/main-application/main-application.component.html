@@ -1,7 +1,17 @@
-<body style="background-color: #80808026">
+<body style="background-color: #80808026;margin: 0">
 
-        <app-header ></app-header>
-    
-        <app-git-card></app-git-card>
+        <app-header  (sortByName)= "sortByNameFn($event)" ></app-header>
+        <div *ngIf = 'totalRecords>0'  id = "recordsCount">
+        <p >
+               Total Records : {{totalRecords}} 
+        </p>
+        </div>
+        <app-git-card  [p]="currentPage" [sortBy] = 'sortBy'
+         (totalRecords)= "totalRecordsFn($event)"  ></app-git-card>
+         <app-paginator  *ngIf = "totalRecords>0"
+          (currentPage)= "currentPageFn($event)">
+
+         </app-paginator>
+        
 </body>
 

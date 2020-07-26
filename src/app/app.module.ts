@@ -10,6 +10,8 @@ import { MainApplicationComponent } from './main-application/main-application.co
 import { LoaderComponent } from './shared/component/loader/loader.component'
 import {ProgressSpinnerModule} from 'primeng/progressspinner';
 import { InterceptorService } from './shared/service/interceptor';
+import { PaginatorComponent } from './paginator/paginator.component';
+import {NgxPaginationModule} from 'ngx-pagination'
 
 @NgModule({
   declarations: [
@@ -17,13 +19,16 @@ import { InterceptorService } from './shared/service/interceptor';
     HeaderComponent,
     GitCardComponent,
     MainApplicationComponent,
-    LoaderComponent
+    LoaderComponent,
+    PaginatorComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    ProgressSpinnerModule
+    ProgressSpinnerModule,
+    NgxPaginationModule
+    
     
   ],
   providers: [{

@@ -36,4 +36,9 @@ toggleLoaderState(status){
   this.toggleLoaderState$.next(status)
 }
 
+getRepositoryDetails(user){
+ return this.http.get<any>(RequestUrls.Urls.usersRep+user+'/repos')
+
+}
+
 }

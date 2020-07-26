@@ -1,37 +1,67 @@
-<div class="container"  *ngIf = 'response?.length>0' > 
-    <div id="card" *ngFor = 'let x of response' >
-<div id = 'img'>
-    <img [src] ="x.avatar_url">
+<div class="container" *ngIf="response?.length > 0">
+  <div
+    id="card_container"
+    *ngFor="
+      let x of response | paginate: { itemsPerPage: 6, currentPage: p };
+      let i = index;
+    "
+  >
+    <div id="card">
+      <div id="img">
+        <img [src]="x.avatar_url" />
+      </div>
+      <div id="name-details">
+        <span id="name">
+          {{ x.login }}
+        </span>
+        <span id="url"> Profile URL: {{ x.html_url }} </span>
+      </div>
 
-</div>
-<div id = "name-details">
-    <span id = "name">
-        {{x.login}}
-    </span>
-    <span id = 'url'>
-        Profile URL: {{x.html_url}}
-    </span>
-</div>
-
-<div id = 'details'>
-    <button>
-        Details
-    </button>
-</div>
-
+      <div id="details">
+        <button [id]="i" (click)="clickOnDetails($event, x, i)">
+          Details
+        </button>
+      </div>
     </div>
+    <div *ngIf="expend[i]">
+      <div id="row" *ngFor="let y of usersRepoList">
+        <div id="repo_name">
+          {{ y.name }}
+        </div>
+        <div>
+          <span class="repo_details" *ngIf="y.language !== null">
+            Language:
+          </span>
+          <span *ngIf="y.language !== null" style="margin-right: 3%">{{
+            y.language
+          }}</span>
+          <span class="repo_details" *ngIf="y.open_issues_count !== null">
+            Open Issues:
+          </span>
+          <span>{{ y.open_issues_count }}</span>
+          <span
+            style="font-weight: 600;
+                     margin-left: 3%;
+                     font-size: 0.9rem;"
+            *ngIf="y.watchers_count !== null"
+          >
+            Watchers:
+          </span>
 
+          <span>{{ y.watchers_count }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="no-record" *ngIf = 'response?.length===0'>
-    <div style="margin: auto"> 
-        <p> 
-                This search did not find any Records.
-        </p>
-        <p>
-                Please enter different search criteria
-        </p>
-
-    </div>
-
+<div class="no-record" *ngIf="response?.length === 0">
+  <div style="margin: auto">
+    <p>
+      This search did not find any Records.
+    </p>
+    <p>
+      Please enter different search criteria
+    </p>
+  </div>
 </div>

@@ -1,16 +1,18 @@
 <div class="header">
     <div  id = 'sort'>
-
-        <select id = 'sort-select'>
-                <option value="byName">Sort By Name</option>
-                <option value="byRank">Sort By Rank</option>
+            <i class="fa fa-caret-down" aria-hidden="true"></i>
+        <select id = 'sort-select' (change)= "sort($event)"
+        >
+                <option value="" disabled selected hidden>Sort By Name</option>
+                <option value="asc">Name (A - Z)</option>
+                <option value="dec">Name (Z - A)</option>
               </select>
 
     </div>
   
     <div  id = 'search'>
-        <input (keyup)= "search($event)" type="text">
-
+        <input (keyup)= "search($event)" [disabled] = "statusDisabled"
+        type="text">
     </div>
 
 </div>
