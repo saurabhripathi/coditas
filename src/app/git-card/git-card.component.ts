@@ -36,16 +36,20 @@ export class GitCardComponent implements OnInit, OnChanges, AfterViewInit {
     })).subscribe((response) => {
       this.response = response.items
       this.globalService.paginateEventExecuteFn(true)
-
+      
+      this.cdrf.detectChanges()
 
       this.totalRecords.emit({ totalRecords: response.items.length })
-      setTimeout(() => {
-        if (this.response.length > 0) {
-          this.sortFn()
-        }
-      }, 100)
 
-      this.cdrf.detectChanges()
+      if (this.response.length > 0) {
+        setTimeout(() => {
+          this.sortFn()
+        }, 100)
+        
+      }
+     
+
+
 
     })
   }
@@ -76,8 +80,9 @@ export class GitCardComponent implements OnInit, OnChanges, AfterViewInit {
           if (Object.keys(this.expend).length > 0) {
 
             for (let x of Object.keys(this.expend)) {
-              if (x !== i) {
+              if (x !== i &&  document.getElementById(x.toString()))   {
                 this.expend[x] = false
+                document.getElementById(x.toString()).textContent = "Details"
               }
             }
           }
