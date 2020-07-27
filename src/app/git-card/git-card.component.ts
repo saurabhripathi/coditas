@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges, DoCheck, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges, DoCheck, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 import { GlobalService } from '../shared/service/global.service';
 import { debounceTime, switchMap, debounce, distinctUntilChanged } from 'rxjs/operators';
 import { NgxPaginationModule } from 'ngx-pagination'
@@ -10,7 +10,12 @@ import { Subject } from 'rxjs';
   templateUrl: './git-card.component.html',
   styleUrls: ['./git-card.component.scss']
 })
-export class GitCardComponent implements OnInit, OnChanges {
+export class GitCardComponent implements OnInit, OnChanges, AfterViewInit {
+  ngAfterViewInit(): void {
+    for (let x of Object.keys(this.expend)) {
+      document.getElementById(x.toString()).textContent = "Details"
+    }
+  }
 
   expend: any = {}
   @Input() sortBy: string
@@ -23,7 +28,7 @@ export class GitCardComponent implements OnInit, OnChanges {
   response: any = []
   @Input() pageClicked: any
 
-  constructor(private readonly globalService: GlobalService, private readonly cdrf:ChangeDetectorRef) { }
+  constructor(private readonly globalService: GlobalService, private readonly cdrf: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.globalService.passingKeyWordFromHeaderToCard.pipe(debounceTime(600), distinctUntilChanged(), switchMap((value) => {
@@ -31,21 +36,25 @@ export class GitCardComponent implements OnInit, OnChanges {
     })).subscribe((response) => {
       this.response = response.items
       this.globalService.paginateEventExecuteFn(true)
-    
-     
+
+
       this.totalRecords.emit({ totalRecords: response.items.length })
-      setTimeout(()=>{
-        if(this.response.length>0){
+      setTimeout(() => {
+        if (this.response.length > 0) {
           this.sortFn()
         }
-      },100)
-    
+      }, 100)
+
+      this.cdrf.detectChanges()
+
     })
   }
 
   sortFn() {
 
     this.toChangePreviousState()
+
+
     if (this.sortBy === 'asc') {
       this.response.sort((a, b) => a.login.localeCompare(b.login))
     }
@@ -65,10 +74,10 @@ export class GitCardComponent implements OnInit, OnChanges {
         this.usersRepoList = response
         if (this.usersRepoList.length > 0) {
           if (Object.keys(this.expend).length > 0) {
+
             for (let x of Object.keys(this.expend)) {
               if (x !== i) {
                 this.expend[x] = false
-                document.getElementById(x.toString()).textContent = "Details"
               }
             }
           }
@@ -87,12 +96,10 @@ export class GitCardComponent implements OnInit, OnChanges {
   }
 
   toChangePreviousState() {
-   
+
     if (Object.keys(this.expend).length > 0) {
       for (let x of Object.keys(this.expend)) {
-        console.log(document.getElementById(x.toString()).textContent )
         this.expend[x] = false
-        document.getElementById(x.toString()).textContent = "Details"
 
       }
     }
