@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnChanges, DoCheck } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnChanges, DoCheck, ChangeDetectorRef } from '@angular/core';
 import { GlobalService } from '../shared/service/global.service';
 import { debounceTime, switchMap, debounce, distinctUntilChanged } from 'rxjs/operators';
 import { NgxPaginationModule } from 'ngx-pagination'
@@ -21,16 +21,18 @@ export class GitCardComponent implements OnInit, OnChanges {
   response: any = []
   @Input() pageClicked: any
 
-  constructor(private readonly globalService: GlobalService) { }
+  constructor(private readonly globalService: GlobalService, private readonly cdrf:ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.globalService.passingKeyWordFromHeaderToCard.pipe(debounceTime(500), distinctUntilChanged(), switchMap((value) => {
+    this.globalService.passingKeyWordFromHeaderToCard.pipe(debounceTime(600), distinctUntilChanged(), switchMap((value) => {
       return this.globalService.getUsersList({ q: value })
     })).subscribe((response) => {
       this.response = response.items
+      this.p =1
       this.sortFn()
       this.toChangePreviousState()
       this.totalRecords.emit({ totalRecords: response.items.length })
+      this.cdrf.detectChanges()
     })
   }
 
