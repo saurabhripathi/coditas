@@ -2,6 +2,7 @@ import { Component, OnInit, Output, EventEmitter, Input, OnChanges, DoCheck, Cha
 import { GlobalService } from '../shared/service/global.service';
 import { debounceTime, switchMap, debounce, distinctUntilChanged } from 'rxjs/operators';
 import { NgxPaginationModule } from 'ngx-pagination'
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -10,6 +11,7 @@ import { NgxPaginationModule } from 'ngx-pagination'
   styleUrls: ['./git-card.component.scss']
 })
 export class GitCardComponent implements OnInit, OnChanges {
+
   expend: any = {}
   @Input() sortBy: string
   @Input() p: number = 1
@@ -28,11 +30,12 @@ export class GitCardComponent implements OnInit, OnChanges {
       return this.globalService.getUsersList({ q: value })
     })).subscribe((response) => {
       this.response = response.items
-      this.p =1
+      this.globalService.paginateEventExecuteFn(true)
       this.sortFn()
       this.toChangePreviousState()
       this.totalRecords.emit({ totalRecords: response.items.length })
       this.cdrf.detectChanges()
+    
     })
   }
 

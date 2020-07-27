@@ -1,4 +1,6 @@
-import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { GlobalService } from '../shared/service/global.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -6,24 +8,30 @@ import { Component, OnInit, Input, OnChanges, Output, EventEmitter } from '@angu
   templateUrl: './paginator.component.html',
   styleUrls: ['./paginator.component.scss']
 })
-export class PaginatorComponent implements OnInit,OnChanges {
-  totalPages: number;
-  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
-   
-    
+export class PaginatorComponent implements OnInit, OnChanges, OnDestroy {
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe()
+    }
   }
- 
+  totalPages: number;
+  subscription: Subscription
+  ngOnChanges(changes: import("@angular/core").SimpleChanges): void {
+  }
+
   @Output() currentPage = new EventEmitter<any>()
 
 
-  constructor() { }
+  constructor(private readonly global: GlobalService) { }
 
   ngOnInit(): void {
+    this.subscription = this.global.paginateEventExecute.subscribe(() => {
+      this.pageChanged(1)
+    })
   }
 
-
-  pageChanged(event){
-this.currentPage.emit(event)
+  pageChanged(event) {
+    this.currentPage.emit(event)
   }
 
 

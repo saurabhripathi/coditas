@@ -15,6 +15,7 @@ export class GlobalService {
   public userList = new BehaviorSubject<any>({items:[]})
   public passingKeyWordFromHeaderToCard = new Subject<any>()
   public toggleLoaderState$ = new BehaviorSubject<boolean>(false)
+  public paginateEventExecute = new Subject<any>()
 
   constructor(private readonly http:HttpService) { }
 
@@ -38,7 +39,10 @@ toggleLoaderState(status){
 
 getRepositoryDetails(user){
  return this.http.get<any>(RequestUrls.Urls.usersRep+user+'/repos')
+}
 
+paginateEventExecuteFn(value){
+  this.paginateEventExecute.next(value)
 }
 
 }
