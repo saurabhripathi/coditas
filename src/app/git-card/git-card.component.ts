@@ -104,7 +104,11 @@ export class GitCardComponent implements OnInit, OnChanges, AfterViewInit {
 
     if (Object.keys(this.expend).length > 0) {
       for (let x of Object.keys(this.expend)) {
+
         this.expend[x] = false
+        if( document.getElementById(x.toString())){
+          document.getElementById(x.toString()).textContent = "Details"
+        }
 
       }
     }
