@@ -31,10 +31,14 @@ export class GitCardComponent implements OnInit, OnChanges {
     })).subscribe((response) => {
       this.response = response.items
       this.globalService.paginateEventExecuteFn(true)
-      this.sortFn()
-      this.toChangePreviousState()
+    
+     
       this.totalRecords.emit({ totalRecords: response.items.length })
-      this.cdrf.detectChanges()
+      setTimeout(()=>{
+        if(this.response.length>0){
+          this.sortFn()
+        }
+      },100)
     
     })
   }
@@ -83,10 +87,13 @@ export class GitCardComponent implements OnInit, OnChanges {
   }
 
   toChangePreviousState() {
+   
     if (Object.keys(this.expend).length > 0) {
       for (let x of Object.keys(this.expend)) {
+        console.log(document.getElementById(x.toString()).textContent )
         this.expend[x] = false
         document.getElementById(x.toString()).textContent = "Details"
+
       }
     }
 
